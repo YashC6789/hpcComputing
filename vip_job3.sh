@@ -1,13 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=optimization_job          # Job name
-#SBATCH --output=optimization_output.log     # Output log file
-#SBATCH --error=optimization_error.log       # Error log file
-#SBATCH --partition=ice-cpu                   # Partition (change based on your cluster)
-#SBATCH --gres=gpu:1                      # Request 1 GPU
-#SBATCH --mem-per-gpu=64G               # Increase memory (try 32G, 64G, or higher)
-#SBATCH --cpus-per-task=8                 # Request 4 CPU cores
-#SBATCH --time=01:00:00                   # Time limit (1 hour)
-#SBATCH --mail-type=END,FAIL              # Email on job end or fail
+#SBATCH --job-name=cpu_job          # Job name
+#SBATCH --output=output_%j.log       # Output log file (%j = job ID)
+#SBATCH --error=error_%j.log         # Error log file
+#SBATCH --time=02:00:00              # Time limit (HH:MM:SS)
+#SBATCH --partition=ice-cpu    # Specify a CPU-only partition (if required)
+#SBATCH --ntasks=1                   # Number of tasks (1 process)
+#SBATCH --cpus-per-task=8            # Request 4 CPU cores
+#SBATCH --mem=64G
 #SBATCH --mail-user=ychauhan9@gatech.edu  # Replace with your email
 
 # Load necessary modules (modify if needed)
@@ -15,4 +14,4 @@ module load anaconda3
 source activate my_env  # Replace with your Conda environment
 
 # Run the Python script
-python 
+python bf_test.py
