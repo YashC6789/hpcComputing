@@ -2,6 +2,7 @@ import os
 import torch
 import argparse
 import time
+import tracemalloc
 import subprocess
 from accelerate import PartialState
 from diffusers import DiffusionPipeline
@@ -13,9 +14,14 @@ pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1
 pipe.to("cpu")
 
 sTime = time.time()
+tracemalloc.start()
 for i, prompt in enumerate(["dog, 8K"]):
     image = pipe(prompt, num_inference_steps=20).images[0]
     #print(subprocess.run(["nvidia-smi"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True).stdout)
+    current, peak = tracemalloc.get_traced_memory()
+    print(f"Current memory usage: {current / 1024 / 1024:.2f} MB")
+    print(f"Peak memory usage: {peak / 1024 / 1024:.2f} MB")
+    tracemalloc.stop()
     output_filename = f"GPU:1_image_{i}.png"
     image_path = os.path.join("/home/hice1/ychauhan9/ondemand/data/sys/myjobs/projects/default/1/workingoutputs", output_filename)
     image.save(image_path)

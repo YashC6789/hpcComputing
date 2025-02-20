@@ -16,3 +16,4 @@ source activate my_env  # Replace with your Conda environment
 
 # Run the Python script
 accelerate launch bf_test.py --num_processes=1
+free -m
